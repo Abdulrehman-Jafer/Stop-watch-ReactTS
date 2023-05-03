@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: black;
+}
+
+.latoFont {
+  font-family: "Lato", sans-serif, helvetica;
+}
+
+.heading {
+  background-color: rgb(24, 24, 24);
+  text-align: center;
+  padding: 0.2rem;
+  border-bottom: 2px solid rgb(28, 28, 28);
+}
