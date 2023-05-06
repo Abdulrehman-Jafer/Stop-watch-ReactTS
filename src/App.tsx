@@ -8,22 +8,22 @@ const App = () => {
 
   type ofAction =
     | { type: "Update-ms", payload: 1 }
-    | { type: "Update-s", payload: 1 }
-    | { type: "Update-m", payload: 1 }
-    | { type: "Update-h", payload: 1 }
     | { type: "reset-Time", payload?: 0 }
 
   const reducer = (StopWatchState: stop_watch, action: ofAction) => {
     const { type, payload } = action
     switch (type) {
       case "Update-ms":
-        return { ...StopWatchState, ms: StopWatchState.ms == 99 ? 0 : StopWatchState.ms + payload }
-      case "Update-s":
-        return { ...StopWatchState, s: StopWatchState.s == 59 ? 0 : StopWatchState.s + payload }
-      case "Update-m":
-        return { ...StopWatchState, m: StopWatchState.m == 59 ? 0 : StopWatchState.m + payload }
-      case "Update-h":
-        return { ...StopWatchState, h: StopWatchState.h == 24 ? 0 : StopWatchState.h ? StopWatchState.h + payload : 0 }
+        if (StopWatchState.ms == 99) {
+          if (StopWatchState.s == 59) {
+            if (StopWatchState.h == 59) {
+              return { ...StopWatchState, ms: 0, s: 0, m: 0, h: StopWatchState.h ? StopWatchState.h + 1 : StopWatchState.h }
+            }
+            return { ...StopWatchState, ms: 0, s: 0, m: StopWatchState.m + 1 }
+          }
+          return { ...StopWatchState, ms: 0, s: StopWatchState.s + 1 }
+        }
+        return { ...StopWatchState, ms: StopWatchState.ms + payload }
       case "reset-Time":
         return { h: 0, m: 0, s: 0, ms: 0 }
       default:
@@ -39,16 +39,7 @@ const App = () => {
   useEffect(() => {
     if (isTiming) {
       const msId = setInterval(() => dispatch({ type: "Update-ms", payload: 1 }), 10)
-      const sId = setInterval(() => dispatch({ type: "Update-s", payload: 1 }), 1000)
-      const mId = setInterval(() => dispatch({ type: "Update-m", payload: 1 }), 60000)
-      const hId = setInterval(() => dispatch({ type: "Update-h", payload: 1 }), 3600000)
-
-      return () => {
-        clearInterval(msId)
-        clearInterval(sId)
-        clearInterval(mId)
-        clearInterval(hId)
-      }
+      return () => clearInterval(msId)
     }
   }, [isTiming])
 
@@ -75,3 +66,8 @@ const App = () => {
 }
 
 export default App
+
+
+//Add alarm functionality to Beep after specific time
+
+//This has some bugs
