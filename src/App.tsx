@@ -66,8 +66,3 @@ const App = () => {
 }
 
 export default App
-
-
-//Add alarm functionality to Beep after specific time
-
-//This has some bugs
